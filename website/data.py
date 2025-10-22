@@ -32,6 +32,7 @@ def lifeExpectancy():
 
 def population():
     url = "https://ourworldindata.org/grapher/population.csv"
+    # url = "https://ourworldindata.org/grapher/population-with-un-projections?country=USA~IND~CHN~IDN~PAK~VAT~NIU~TKL~FLK~MSR~SHN~SPM~TUV~BLM~WLF~NRU~COK~AIA~PLW~MAF~BES~SMR~GIB~MHL~MCO~VGB~LIE~SXM~MNP~TCA~KNA~ASM~FRO~GRL~GGY~BMU~DMA~CYM~AND~IMN~VIR~ATG~VCT~JEY~TON~ABW~FSM~GRD~SYC~KIR~GUM~LCA~CUW~WSM~STP~PYF~BRB~NCL~GUF~MYT~VUT~MTQ~GLP~ISL~BHS~BLZ~BRN~CPV~MDV~MLT~ESH~SUR~MNE~LUX~MAC~BTN~SLB~GUY~COM~REU~FJI~DJI~SWZ~MUS~CYP~EST~TLS~TTO~BHR~OWID_KOS~MKD~GNQ~LVA~SVN~GNB~LSO~BWA~GAB~GMB~ALB~JAM~LTU~ARM~NAM~QAT~MDA~BIH~PRI~URY~MNG~ERI~GEO~HRV~PAN~KWT~MRT~OMN~CRI~CAF~NZL~IRL~PSE~LBR~SVK~NOR~FIN~LBN~SGP~DNK~COG~SLV~SRB~BGR~NIC~PRY~KGZ~LBY~TKM~HKG~LAO~SLE~CHE~BLR~AUT~ISR~TGO~HUN~GRC~AZE~PNG~TJK~PRT~SWE~ARE~HND~CZE~CUB~DOM~JOR~SSD~HTI~BEL~TUN~BOL~BDI~RWA~BEN~GIN~ZWE~KHM~ECU~SEN~NLD~GTM~SOM~ROU~TCD~CHL~KAZ~ZMB~MWI~LKA~BFA~TWN~SYR~MLI~NER~PRK~AUS~VEN~CMR~NPL~CIV~MDG~SAU~MOZ~GHA~PER~MYS~UZB~AGO~MAR~UKR~POL~CAN~YEM~AFG~IRQ~ARG~DZA~ESP~UGA~SDN~KOR~COL~MMR~KEN~ITA~ZAF~FRA~TZA~GBR~THA~DEU~TUR~IRN~VNM~COD~EGY~PHL~JPN~ETH~MEX~RUS~BGD~BRA~NGA"
     response = requests.get(url)
     if response.status_code == 200:
         csv_file = io.StringIO(response.text)
@@ -635,17 +636,12 @@ countries = [
     {"country_name": "Serbia", "flag": "🇷🇸"},
     {"country_name": "Singapore", "flag": "🇸🇬"},
     {"country_name": "Slovenia", "flag": "🇸🇮"},
-    {"country_name": "Somalia", "flag": "🇸🇴"},
     {"country_name": "South Africa", "flag": "🇿🇦"},
     {"country_name": "South Korea", "flag": "🇰🇷"},
     {"country_name": "Spain", "flag": "🇪🇸"},
-    {"country_name": "Sri Lanka", "flag": "🇱🇰"},
     {"country_name": "Switzerland", "flag": "🇨🇭"},
-    {"country_name": "Syria", "flag": "🇸🇾"},
-    {"country_name": "Tanzania", "flag": "🇹🇿"},
     {"country_name": "Thailand", "flag": "🇹🇭"},
     {"country_name": "Turkey", "flag": "🇹🇷"},
-    {"country_name": "Uganda", "flag": "🇺🇬"},
     {"country_name": "Ukraine", "flag": "🇺🇦"},
     {"country_name": "United Kingdom", "flag": "🇬🇧"},
     {"country_name": "United States", "flag": "🇺🇸"},
