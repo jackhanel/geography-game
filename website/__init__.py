@@ -1,12 +1,14 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_migrate import Migrate
 from os import getenv
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
 db = SQLAlchemy()
+migrate = Migrate()
 
 def create_app():
     app = Flask(__name__)
@@ -14,6 +16,7 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("POSTGRESQL_DATABASE_URL")
 
     db.init_app(app)
+    migrate.init_app(app, db)
 
     from .views import views
     from .auth import auth
