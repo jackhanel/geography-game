@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Daily Challenge • Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 text-slate-800 flex flex-col">
+    <!-- Header -->
+    <header class="w-full border-b border-slate-200 bg-white/70 backdrop-blur">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="{{ url_for('views.home') }}" class="font-semibold tracking-tight text-slate-900 text-lg">
+                Global Challenge 🌎🌍🌏
+            </a>
+    
+            <!-- Navigation -->
+            <nav class="flex items-center gap-3">
+                <!-- Leaderboard (always visible) -->
+                <a href="{{ url_for('views.leaderboard') }}"
+                    class="px-4 py-2 text-sm font-medium rounded-xl border border-slate-300 hover:bg-slate-100 transition">
+                    Leaderboard 🏆
+                </a>
+    
+                {% if current_user.is_authenticated %}
+                <!-- Logged in: show Log Out -->
+                <a href="{{ url_for('auth.logout') }}"
+                    class="px-4 py-2 text-sm font-medium rounded-xl border border-slate-300 hover:bg-slate-100 transition">
+                    Log Out
+                </a>
+                {% else %}
+                <!-- Not logged in: show Log In + Create Account -->
+                <a href="{{ url_for('auth.login') }}"
+                    class="px-4 py-2 text-sm font-medium rounded-xl border border-slate-300 hover:bg-slate-100 transition">
+                    Log In
+                </a>
+                <a href="{{ url_for('auth.createAccount') }}"
+                    class="px-4 py-2 text-sm font-semibold rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition shadow-sm">
+                    Create Account
+                </a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="w-full" role="alert" aria-live="polite">
+        <div class="relative w-full py-3">
+            <div class="mx-auto px-4 text-center py-3 transition duration-200 rounded-xl ring-1
+                           {% if category == 'success' %}
+                             bg-green-100 text-green-800 ring-green-400
+                           {% elif category == 'error' %}
+                             bg-red-100 text-red-800 ring-red-400
+                           {% elif category == 'warning' %}
+                             bg-yellow-100 text-yellow-800 ring-yellow-400
+                           {% else %}
+                             bg-slate-100 text-slate-800
+                           {% endif %}">
+                <p class="font-medium">{{ message }}</p>
+                <button type="button"
+                    class="absolute right-4 top-1/2 -translate-y-1/2 text-2xl leading-none font-bold text-slate-500 hover:text-slate-700"
+                    aria-label="Dismiss notification" onclick="(function(btn){
+                              const bar = btn.closest('[role=alert]').firstElementChild;
+                              bar.classList.add('opacity-0','-translate-y-1');
+                              setTimeout(()=>btn.closest('[role=alert]').remove(),180);
+                            })(this)">
+                    &times;
+                </button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <!-- Main -->
+    <main class="flex-1 flex items-center justify-center px-4 py-10">
+        <section class="w-full max-w-3xl">
+            <div class="bg-white rounded-2xl shadow-sm ring-1 ring-slate-200 p-6 md:p-8">
+                <!-- Top bar: round + remaining -->
+                <div class="flex items-center justify-between mb-6">
+                    <p class="text-sm text-slate-600">Round <span class="font-semibold text-slate-900">{{ round_number
+                            or 1 }}</span> / 9</p>
+                    <p class="text-sm text-slate-600">Categories left: <span class="font-semibold text-slate-900">{{ 9 -
+                            (used_categories|length if used_categories else 0) }}</span></p>
+                </div>
+
+                <!-- Current country -->
+                <div class="text-center mb-8">
+                    <!-- Score indicator -->
+                    <div id="score-indicator" class="mx-auto mb-3 w-fit rounded-2xl px-4 py-2 text-sm font-semibold ring-1 shadow-sm
+                              bg-green-100 text-green-800 ring-green-400">
+                        Total Score: 0
+                    </div>
+                
+                    <h1 id="flag-display" class="mt-3 text-5xl md:text-6xl font-bold tracking-tight"></h1>
+                    <h1 id="country-display" class="text-3xl md:text-4xl font-bold tracking-tight"></h1>
+                </div>
+
+
+                <!-- Categories grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+                    {% for game_data in all_game_data_for_front_end %}
+                    <button name="pick_category" value="{{ game_data['game_category_front_end_name'] }}"
+                        data-backend="{{ game_data['game_category_backend_name'] }}" type="button" class="group w-full h-16 rounded-xl border text-sm font-semibold transition shadow-sm flex items-center justify-center text-center px-3
+                        {% if used_categories and (game_data['game_category_front_end_name'] in used_categories) %}
+                        border-slate-200 bg-slate-50 text-slate-400 cursor-not-allowed
+                        {% else %}
+                        border-slate-300 bg-white hover:bg-slate-50 active:scale-[.99]
+                        {% endif %}" {% if used_categories and (game_data['game_category_front_end_name'] in
+                        used_categories) %}disabled{% endif %}>
+                        <span class="line-clamp-2">{{ game_data["game_category_front_end_name"] }}</span>
+                    </button>
+                    {% endfor %}
+
+
+                    <!-- Persist minimal state back to server (server should trust session/db, not these) -->
+                    <input type="hidden" name="round_number" value="{{ round_number }}" />
+                </div>
+
+                <!-- Helper text -->
+                <p class="mt-6 text-center text-xs text-slate-500">Select the category you believe the current country would rank closest to #1. Previously chosen categories will be
+                removed for the rest of the game. The next country loads after each category selection.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Hidden auto-submit form -->
+    <form id="gameCompleteForm" method="POST" action="{{ url_for('views.dailyChallenge') }}" class="hidden">
+        <input type="hidden" name="score" id="gc_score">
+    </form>
+
+    <script>
+        // ==== Data from server ====
+        const countries = {{ countries | tojson }};
+        const allGameData = {{ all_game_data_for_front_end | tojson }};
+
+        // ==== Fast lookup: backendKey -> { countryName -> rank }
+        const rankIndex = {};
+        for (const cat of allGameData) {
+            const m = {};
+            for (const row of (cat.country_ranks || [])) m[row.country_name] = Number(row.rank);
+            rankIndex[cat.game_category_backend_name] = m;
+        }
+
+        // ==== State ====
+        let currentIndex = 0;
+        let totalScore = 0;
+        const chosenCategories = new Set(); // backend keys
+
+        // ==== DOM refs ====
+        const flagEl = document.getElementById('flag-display');
+        const countryEl = document.getElementById('country-display');
+        const topBar = document.querySelector('.flex.items-center.justify-between.mb-6');
+        const roundSpan = topBar?.querySelectorAll('p span.font-semibold')[0];
+        const catsLeftSpan = topBar?.querySelectorAll('p span.font-semibold')[1];
+        const buttons = Array.from(document.querySelectorAll('button[name="pick_category"]'));
+        const scoreEl = document.getElementById('score-indicator');
+
+        // Instructions paragraph (beneath categories)
+        const helperEl = document.querySelector('.mt-6.text-center.text-xs.text-slate-500');
+        const INSTRUCTIONS_TEXT =
+            'Select the category you believe the current country would rank closest to #1. Previously chosen categories will be removed for the rest of the game. The next country loads after each category selection.';
+
+        // Create/locate a warning line under the instructions (same style, but red)
+        let warningEl = null;
+        function ensureWarningEl() {
+            if (warningEl) return warningEl;
+            if (helperEl && helperEl.parentElement) {
+                warningEl = document.createElement('p');
+                warningEl.id = 'data-warning';
+                warningEl.className = 'mt-2 text-center text-xs font-medium text-red-600';
+                warningEl.textContent = ''; // start empty
+                helperEl.after(warningEl);
+            }
+            return warningEl;
+        }
+
+        // ==== Score indicator colors (0–150 green, 151–400 yellow, >400 red) ====
+        const GREEN = ['bg-green-100', 'text-green-800', 'ring-green-400'];
+        const YELLOW = ['bg-yellow-100', 'text-yellow-800', 'ring-yellow-400'];
+        const RED = ['bg-red-100', 'text-red-800', 'ring-red-400'];
+
+        function getTierClasses(score) {
+            if (score <= 150) return GREEN;
+            if (score <= 400) return YELLOW;
+            return RED;
+        }
+
+        // Show only above the flag. If lastPick is provided, include it.
+        function updateScoreIndicator(total, lastPick = null) {
+            if (!scoreEl) return;
+            scoreEl.classList.remove(...GREEN, ...YELLOW, ...RED);
+            scoreEl.classList.add(...getTierClasses(total));
+            scoreEl.textContent = lastPick == null
+                ? `Total: ${total}`
+                : `Pick Score: ${lastPick} • Total Score: ${total}`;
+
+            // Subtle pop animation
+            scoreEl.classList.add('scale-105', 'transition', 'duration-150');
+            setTimeout(() => scoreEl.classList.remove('scale-105'), 160);
+        }
+
+        // ==== UI updates ====
+        function updateTopBar() {
+            if (roundSpan) roundSpan.textContent = String(Math.min(currentIndex + 1, countries.length));
+            if (catsLeftSpan) catsLeftSpan.textContent = String(Math.max(9 - chosenCategories.size, 0));
+        }
+
+        function showCountry() {
+            if (!countryEl) return;
+            if (currentIndex >= countries.length || chosenCategories.size >= 9) {
+                endGameAndSubmit();
+                return;
+            }
+            flagEl.textContent = countries[currentIndex]["flag"] || '';
+            countryEl.textContent = countries[currentIndex]["country_name"] || '';
+            updateTopBar();
+        }
+
+        function applyDisabledStyle(btn) {
+            btn.disabled = true;
+            btn.classList.remove('border-slate-300', 'bg-white', 'hover:bg-slate-50', 'active:scale-[.99]');
+            btn.classList.add('border-slate-200', 'bg-slate-50', 'text-slate-400', 'cursor-not-allowed');
+        }
+
+        function handlePick(e) {
+            const btn = e.currentTarget;
+            if (btn.disabled) return;
+
+            const backendKey = btn.dataset.backend;
+            const currentCountry = countries[currentIndex]["country_name"];
+
+            const rank = rankIndex[backendKey]?.[currentCountry];
+            if (rank == null) {
+                // Show red warning under the instructions, keep instructions unchanged
+                const w = ensureWarningEl();
+                if (w) w.textContent = `No data available for ${currentCountry} in “${btn.value}”. Please choose another category.`;
+                return;
+            }
+
+            // Clear any previous warning if this pick is valid
+            if (warningEl) warningEl.textContent = '';
+
+            chosenCategories.add(backendKey);
+            applyDisabledStyle(btn);
+            totalScore += rank;
+
+            // Update ONLY the badge above the flag
+            updateScoreIndicator(totalScore, rank);
+
+            // Advance to next country and render
+            currentIndex += 1;
+            showCountry();
+        }
+
+        // ==== Init ====
+        document.addEventListener('DOMContentLoaded', () => {
+            // Lock instructions text in place beneath categories
+            if (helperEl) helperEl.textContent = INSTRUCTIONS_TEXT;
+            ensureWarningEl();
+
+            buttons.forEach(btn => btn.addEventListener('click', handlePick));
+            updateScoreIndicator(totalScore); // initial badge
+            showCountry();
+        });
+
+        // ==== End game ====
+        let submitted = false;
+
+        function endGameAndSubmit() {
+            if (submitted) return;
+            submitted = true;
+
+            countryEl.textContent = 'Game complete 🎉';
+            buttons.forEach(b => b.disabled = true);
+
+            updateScoreIndicator(totalScore); // final color
+            const form = document.getElementById("gameCompleteForm");
+            document.getElementById("gc_score").value = String(totalScore);
+            form.submit();
+        }
+    </script>
+
+</body>
+
+</html>

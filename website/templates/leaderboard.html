@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Leaderboard • Global Challenge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 text-slate-800 flex flex-col">
+    <!-- Header -->
+    <header class="w-full border-b border-slate-200 bg-white/70 backdrop-blur">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="{{ url_for('views.home') }}" class="font-semibold tracking-tight text-slate-900 text-lg">
+                Global Challenge 🌎🌍🌏
+            </a>
+
+            <!-- Navigation -->
+            <nav class="flex items-center gap-3">
+                <!-- Leaderboard (current page) -->
+                <a href="{{ url_for('views.leaderboard') }}"
+                    class="px-4 py-2 text-sm font-medium rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-800 transition">
+                    Leaderboard 🏆
+                </a>
+
+                {% if current_user.is_authenticated %}
+                <!-- Logged in: show Log Out -->
+                <a href="{{ url_for('auth.logout') }}"
+                    class="px-4 py-2 text-sm font-medium rounded-xl border border-slate-300 hover:bg-slate-100 transition">
+                    Log Out
+                </a>
+                {% else %}
+                <!-- Not logged in: show Log In + Create Account -->
+                <a href="{{ url_for('auth.login') }}"
+                    class="px-4 py-2 text-sm font-medium rounded-xl border border-slate-300 hover:bg-slate-100 transition">
+                    Log In
+                </a>
+                <a href="{{ url_for('auth.createAccount') }}"
+                    class="px-4 py-2 text-sm font-semibold rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition shadow-sm">
+                    Create Account
+                </a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <main class="flex-1">
+        <section class="max-w-5xl mx-auto px-4 py-10">
+            <div class="mb-8 text-center">
+                <h1 class="text-3xl md:text-4xl font-bold tracking-tight">Leaderboard</h1>
+                <p class="text-slate-600 mt-2">Daily results and all-time standings.</p>
+            </div>
+
+            <!-- Daily Leaderboard -->
+            <div class="bg-white rounded-2xl shadow-sm ring-1 ring-slate-200 overflow-hidden mb-10">
+                <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+                    <h2 class="text-lg font-semibold">Today’s Leaderboard</h2>
+                    <span class="text-xs text-slate-500">Updated daily</span>
+                </div>
+
+                {# --- DAILY: lowest first; zeros at bottom --- #}
+                {% set daily_nonzero = all_daily_score_summaries
+                | rejectattr('score', 'equalto', 0)
+                | sort(attribute='score') | list %}
+                {% set daily_zero = all_daily_score_summaries
+                | selectattr('score', 'equalto', 0) | list %}
+                {% set daily_sorted = daily_nonzero + daily_zero %}
+
+                {% if daily_sorted|length > 0 %}
+                <div class="overflow-x-auto">
+                    <table class="min-w-full text-sm">
+                        <thead class="bg-slate-50 text-slate-700">
+                            <tr>
+                                <th class="text-left px-6 py-3 font-semibold">Rank</th>
+                                <th class="text-left px-6 py-3 font-semibold">Username</th>
+                                <th class="text-right px-6 py-3 font-semibold">Score</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            {% for row in daily_sorted %}
+                            {% set rank = loop.index %}
+                            <tr>
+                                <td class="px-6 py-3">
+                                    <span class="font-medium {% if rank <= 3 %}text-indigo-600{% endif %}">
+                                        {% if rank == 1 %}🥇{% elif rank == 2 %}🥈{% elif rank == 3 %}🥉{% else %}{{
+                                        rank }}{% endif %}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-3 font-medium">{{ row.username }}</td>
+                                <td class="px-6 py-3 text-right tabular-nums font-semibold">{{ row.score }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="px-6 py-8 text-center text-slate-500">
+                    No scores yet today. Be the first to play!
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- All-time Leaderboard -->
+            <div class="bg-white rounded-2xl shadow-sm ring-1 ring-slate-200 overflow-hidden">
+                <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+                    <h2 class="text-lg font-semibold">All-time Leaderboard</h2>
+                    <span class="text-xs text-slate-500">Total points across all games</span>
+                </div>
+
+                {# --- ALL-TIME: lowest first; zeros at bottom --- #}
+                {% set alltime_nonzero = all_user_score_summaries
+                | rejectattr('total_game_score', 'equalto', 0)
+                | sort(attribute='total_game_score') | list %}
+                {% set alltime_zero = all_user_score_summaries
+                | selectattr('total_game_score', 'equalto', 0) | list %}
+                {% set alltime_sorted = alltime_nonzero + alltime_zero %}
+
+                {% if alltime_sorted|length > 0 %}
+                <div class="overflow-x-auto">
+                    <table class="min-w-full text-sm">
+                        <thead class="bg-slate-50 text-slate-700">
+                            <tr>
+                                <th class="text-left px-6 py-3 font-semibold">Rank</th>
+                                <th class="text-left px-6 py-3 font-semibold">Username</th>
+                                <th class="text-right px-6 py-3 font-semibold">Total Score</th>
+                                <th class="text-right px-6 py-3 font-semibold">Total Games</th>
+                                <th class="text-right px-6 py-3 font-semibold">Score / Game</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            {% for row in alltime_sorted %}
+                            <tr>
+                                <td class="px-6 py-3">
+                                    <span class="font-medium {% if loop.index <= 3 %}text-indigo-600{% endif %}">
+                                        {% if loop.index == 1 %}🥇{% elif loop.index == 2 %}🥈{% elif loop.index == 3
+                                        %}🥉{% else %}{{ loop.index }}{% endif %}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-3 font-medium">{{ row.username }}</td>
+                                <td class="px-6 py-3 text-right tabular-nums font-semibold">{{ row.total_game_score }}
+                                </td>
+                                <td class="px-6 py-3 text-right tabular-nums">{{ row.total_game_count }}</td>
+                                <td class="px-6 py-3 text-right tabular-nums">
+                                    {{ "%.2f"|format(row.score_per_game or 0) }}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="px-6 py-8 text-center text-slate-500">
+                    No all-time scores yet. Play a few games to get on the board!
+                </div>
+                {% endif %}
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,124 @@
+[
+  {
+    "game_category_backend_name": "co2_emissions_per_capita_data",
+    "country_ranks": [
+      { "country_name": "Poland", "rank": 43 },
+      { "country_name": "New Zealand", "rank": 60 },
+      { "country_name": "Montenegro", "rank": 108 },
+      { "country_name": "India", "rank": 144 },
+      { "country_name": "Bolivia", "rank": 149 },
+      { "country_name": "Guatemala", "rank": 171 },
+      { "country_name": "Zambia", "rank": 203 },
+      { "country_name": "Mali", "rank": 206 },
+      { "country_name": "Burundi", "rank": 229 }
+    ]
+  },
+  {
+    "game_category_backend_name": "calorie_supply_per_capita_data",
+    "country_ranks": [
+      { "country_name": "Poland", "rank": 9 },
+      { "country_name": "Montenegro", "rank": 14 },
+      { "country_name": "New Zealand", "rank": 81 },
+      { "country_name": "Guatemala", "rank": 153 },
+      { "country_name": "Mali", "rank": 161 },
+      { "country_name": "India", "rank": 185 },
+      { "country_name": "Bolivia", "rank": 210 },
+      { "country_name": "Zambia", "rank": 227 },
+      { "country_name": "Burundi", "rank": 240 }
+    ]
+  },
+  {
+    "game_category_backend_name": "yearly_number_of_objects_launched_into_outer_space_data",
+    "country_ranks": [
+      { "country_name": "New Zealand", "rank": 9 },
+      { "country_name": "India", "rank": 12 },
+      { "country_name": "Poland", "rank": 43 },
+      { "country_name": "Bolivia", "rank": 60 },
+      { "country_name": "Guatemala", "rank": 74 }
+    ]
+  },
+  {
+    "game_category_backend_name": "military_spending_as_a_share_of_gdp_data",
+    "country_ranks": [
+      { "country_name": "Mali", "rank": 14 },
+      { "country_name": "Poland", "rank": 15 },
+      { "country_name": "Burundi", "rank": 16 },
+      { "country_name": "India", "rank": 44 },
+      { "country_name": "Montenegro", "rank": 71 },
+      { "country_name": "Bolivia", "rank": 89 },
+      { "country_name": "Zambia", "rank": 90 },
+      { "country_name": "New Zealand", "rank": 100 },
+      { "country_name": "Guatemala", "rank": 146 }
+    ]
+  },
+  {
+    "game_category_backend_name": "unique_species_data",
+    "country_ranks": [
+      { "country_name": "India", "rank": 10 },
+      { "country_name": "Bolivia", "rank": 22 },
+      { "country_name": "New Zealand", "rank": 24 },
+      { "country_name": "Guatemala", "rank": 34 },
+      { "country_name": "Zambia", "rank": 64 },
+      { "country_name": "Burundi", "rank": 125 },
+      { "country_name": "Mali", "rank": 129 },
+      { "country_name": "Montenegro", "rank": 216 },
+      { "country_name": "Poland", "rank": 225 }
+    ]
+  },
+  {
+    "game_category_backend_name": "energy_use_per_capita_data",
+    "country_ranks": [
+      { "country_name": "New Zealand", "rank": 39 },
+      { "country_name": "Poland", "rank": 74 },
+      { "country_name": "Montenegro", "rank": 110 },
+      { "country_name": "Bolivia", "rank": 149 },
+      { "country_name": "India", "rank": 152 },
+      { "country_name": "Guatemala", "rank": 167 },
+      { "country_name": "Zambia", "rank": 191 },
+      { "country_name": "Mali", "rank": 206 },
+      { "country_name": "Burundi", "rank": 229 }
+    ]
+  },
+  {
+    "game_category_backend_name": "population_data",
+    "country_ranks": [
+      { "country_name": "India", "rank": 10 },
+      { "country_name": "New Zealand", "rank": 40 },
+      { "country_name": "Poland", "rank": 70 },
+      { "country_name": "Mali", "rank": 93 },
+      { "country_name": "Montenegro", "rank": 96 },
+      { "country_name": "Bolivia", "rank": 99 },
+      { "country_name": "Guatemala", "rank": 110 },
+      { "country_name": "Burundi", "rank": 130 },
+      { "country_name": "Zambia", "rank": 161 }
+    ]
+  },
+  {
+    "game_category_backend_name": "gdp_per_capita_data",
+    "country_ranks": [
+      { "country_name": "New Zealand", "rank": 41 },
+      { "country_name": "Poland", "rank": 48 },
+      { "country_name": "Montenegro", "rank": 76 },
+      { "country_name": "Guatemala", "rank": 130 },
+      { "country_name": "Bolivia", "rank": 141 },
+      { "country_name": "India", "rank": 142 },
+      { "country_name": "Zambia", "rank": 180 },
+      { "country_name": "Mali", "rank": 189 },
+      { "country_name": "Burundi", "rank": 210 }
+    ]
+  },
+  {
+    "game_category_backend_name": "life_expectancy_data",
+    "country_ranks": [
+      { "country_name": "New Zealand", "rank": 36 },
+      { "country_name": "Poland", "rank": 74 },
+      { "country_name": "Montenegro", "rank": 100 },
+      { "country_name": "Guatemala", "rank": 159 },
+      { "country_name": "India", "rank": 168 },
+      { "country_name": "Bolivia", "rank": 202 },
+      { "country_name": "Zambia", "rank": 224 },
+      { "country_name": "Burundi", "rank": 243 },
+      { "country_name": "Mali", "rank": 258 }
+    ]
+  }
+]
