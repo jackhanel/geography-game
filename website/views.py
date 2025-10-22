@@ -127,4 +127,5 @@ def leaderboard():
             "score_per_game": user_score_per_game
             }
         all_user_score_summaries.append(user_score_summary)
+        
     return render_template("leaderboard.html", all_daily_score_summaries=all_daily_score_summaries, all_user_score_summaries=all_user_score_summaries)
