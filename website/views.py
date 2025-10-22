@@ -116,7 +116,10 @@ def leaderboard():
         for daily_score_for_user in all_daily_scores_for_user:
             total_game_count += 1
             total_game_score += daily_score_for_user.score
-        user_score_per_game = total_game_score/total_game_count
+        if total_game_score == 0 or total_game_count == 0:
+            user_score_per_game = 0
+        else:
+            user_score_per_game = total_game_score/total_game_count
         user_score_summary = {
             "username": username, 
             "total_game_count": total_game_count, 

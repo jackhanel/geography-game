@@ -124,8 +124,8 @@
                 </div>
 
                 <!-- Helper text -->
-                <p class="mt-6 text-center text-xs text-slate-500">Select the category you believe the current country would rank closest to #1. Previously chosen categories will be
-                removed for the rest of the game. The next country loads after each category selection.</p>
+                <p class="mt-6 text-center text-xs text-slate-500">Select the category you believe the current country ranks closest to #1. The score reflects the country's actual rank in that category. Previously chosen categories will be
+                removed for the rest of the game. The next country loads after each category selection. The lower the score, the better.</p>
             </div>
         </section>
     </main>
@@ -165,7 +165,7 @@
         // Instructions paragraph (beneath categories)
         const helperEl = document.querySelector('.mt-6.text-center.text-xs.text-slate-500');
         const INSTRUCTIONS_TEXT =
-            'Select the category you believe the current country would rank closest to #1. Previously chosen categories will be removed for the rest of the game. The next country loads after each category selection.';
+            "Select the category you believe the current country ranks closest to #1. The score reflects the country's actual rank in that category. Previously chosen categories will be removed for the rest of the game. The next country loads after each category selection. The lower the score, the better.";
 
         // Create/locate a warning line under the instructions (same style, but red)
         let warningEl = null;
