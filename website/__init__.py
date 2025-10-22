@@ -11,7 +11,7 @@ db = SQLAlchemy()
 def create_app():
     app = Flask(__name__)
     app.config["SECRET_KEY"] = os.getenv("FLASK_SECRET_KEY")
-    app.config["SQLALCHEMY_DATABASE_URI"] = f'sqlite:///database.db'
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("POSTGRESQL_DATABASE_URL")
 
     db.init_app(app)
 
