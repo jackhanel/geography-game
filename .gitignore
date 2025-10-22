@@ -1,4 +1,5 @@
 .venv
 instance
+migrations
 .env
 website/__pycache__
