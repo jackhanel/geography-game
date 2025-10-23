@@ -130,11 +130,15 @@ def leaderboard():
 
     # show the user the optimal solution for today's challenge
     existing_daily_challenge = dailyChallenges.query.filter_by(date=today).first()
-    existing_user_attempt = dailyScores.query.filter_by(date=today, user_id=current_user.id).first()
+    if current_user.is_authenticated:
+        user_id = current_user.id
+    else:
+        user_id is None
+    existing_user_attempt = dailyScores.query.filter_by(date=today, user_id=user_id).first()
     if existing_daily_challenge and existing_user_attempt:
         all_game_data_for_front_end = existing_daily_challenge.all_game_data_for_front_end
         optimal_solution = optimalSolution(all_game_data_for_front_end)
     else:
         optimal_solution = None
 
-    return render_template("leaderboard.html", all_daily_score_summaries=all_daily_score_summaries, all_user_score_summaries=all_user_score_summaries, optimal_solution=optimal_solution)
+    return render_template("leaderboard.html", all_daily_score_summaries=all_daily_score_summaries, all_user_score_summaries=all_user_score_summaries, optimal_solution=optimal_solution, today=today)
