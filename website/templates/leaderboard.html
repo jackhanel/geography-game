@@ -157,6 +157,77 @@
                 </div>
                 {% endif %}
             </div>
+
+            <!-- Optimal Solution (shown if user has attempted today) -->
+            {% if optimal_solution %}
+            <div class="bg-white rounded-2xl shadow-sm ring-1 ring-slate-200 overflow-hidden mb-10">
+                <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <h2 class="text-lg font-semibold">Today’s Optimal Solution</h2>
+                        <span
+                            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">
+                            Lowest possible score
+                        </span>
+                    </div>
+                    <div class="text-sm text-slate-600">
+                        Total score:
+                        <span class="font-semibold text-slate-900 tabular-nums">{{ optimal_solution.total_score }}</span>
+                    </div>
+                </div>
+            
+                <div class="overflow-x-auto">
+                    <table class="min-w-full text-sm">
+                        <thead class="bg-slate-50 text-slate-700">
+                            <tr>
+                                <th class="text-left px-6 py-3 font-semibold">#</th>
+                                <th class="text-left px-6 py-3 font-semibold">Country</th>
+                                <th class="text-left px-6 py-3 font-semibold">Optimal Category</th>
+                                <th class="text-right px-6 py-3 font-semibold">Rank</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            {% for pair in optimal_solution.pairs %}
+                            <tr>
+                                <td class="px-6 py-3 text-slate-500">{{ loop.index }}</td>
+                                <td class="px-6 py-3 font-medium">
+                                    <span class="inline-flex items-center gap-2">
+                                        {% if pair.flag %}
+                                        <span class="text-lg" aria-hidden="true">{{ pair.flag }}</span>
+                                        {% endif %}
+                                        <span>{{ pair.country }}</span>
+                                    </span>
+                                </td>
+                                <td class="px-6 py-3">
+                                    <span
+                                        class="inline-flex items-center px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 ring-1 ring-slate-200">
+                                        {{ pair.category_frontend }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-3 text-right">
+                                    <span
+                                        class="font-semibold tabular-nums {% if pair.rank <= 10 %}text-emerald-700{% elif pair.rank <= 50 %}text-slate-900{% else %}text-slate-600{% endif %}">
+                                        {{ pair.rank }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            
+                <div class="px-6 py-4 bg-slate-50 text-xs text-slate-600 border-t border-slate-200">
+                    This pairing minimizes the sum of ranks across all 9 categories with a one-to-one assignment.
+                </div>
+            </div>
+            {% elif current_user.is_authenticated %}
+            <!-- Optional nudge if logged-in user hasn't played -->
+            <div class="bg-white rounded-2xl shadow-sm ring-1 ring-slate-200 overflow-hidden mb-10">
+                <div class="px-6 py-6 text-center text-slate-600">
+                    Play today’s challenge to reveal the optimal solution here.
+                </div>
+            </div>
+            {% endif %}
+
         </section>
     </main>
 </body>
