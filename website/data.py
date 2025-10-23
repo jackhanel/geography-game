@@ -2,6 +2,7 @@ import requests
 import csv
 import io
 import random
+from itertools import permutations
 
 
 def lifeExpectancy():
@@ -660,3 +661,99 @@ def getCountries():
                 random_countries.append(countries[random_number])
                 break
     return random_countries
+
+
+def optimalSolution(all_game_data_for_front_end):
+    # Step 1: Extract category information
+    all_category_backend_names = [
+        category_block["game_category_backend_name"] for category_block in all_game_data_for_front_end
+    ]
+
+    category_name_to_frontend_label = {
+        category_block["game_category_backend_name"]: category_block[
+            "game_category_front_end_name"
+        ]
+        for category_block in all_game_data_for_front_end
+    }
+
+    # Step 2: Extract all unique country names that appear in the dataset
+    all_country_names = sorted(
+        {
+            entry["country_name"]
+            for category_block in all_game_data_for_front_end
+            for entry in category_block["country_ranks"]
+        }
+    )
+
+    # Step 3: Build a lookup dictionary of ranks
+    # rank_lookup[country_name][category_backend_name] = rank_value
+    rank_lookup = {country_name: {} for country_name in all_country_names}
+
+    for category_block in all_game_data_for_front_end:
+        category_backend_name = category_block["game_category_backend_name"]
+
+        for country_entry in category_block["country_ranks"]:
+            country_name = country_entry["country_name"]
+            country_rank_value = int(country_entry["rank"])
+            rank_lookup[country_name][category_backend_name] = country_rank_value
+
+    # Step 4: Initialize variables to track the best (lowest) total score
+    lowest_total_score = None
+    best_country_category_pairs = None
+
+    # Step 5: Loop over every possible permutation of categories
+    # Each permutation represents a unique 1-to-1 assignment of categories to countries.
+    for category_permutation in permutations(all_category_backend_names):
+        current_total_score = 0
+        is_valid_permutation = True
+
+        # Step 6: For each country, assign the corresponding category in this permutation
+        for country_name, category_backend_name in zip(
+            all_country_names, category_permutation
+        ):
+            # Look up the country's rank for this category
+            current_rank = rank_lookup[country_name].get(category_backend_name)
+
+            # If data is missing, mark this permutation as invalid and skip it
+            if current_rank is None:
+                is_valid_permutation = False
+                break
+
+            # Add the rank to the running total
+            current_total_score += current_rank
+
+            # Early exit: stop evaluating if this permutation is already worse than the best one
+            if (
+                lowest_total_score is not None
+                and current_total_score >= lowest_total_score
+            ):
+                is_valid_permutation = False
+                break
+
+        # Step 7: If this permutation is valid and has a lower total score, update the best record
+        if is_valid_permutation:
+            if lowest_total_score is None or current_total_score < lowest_total_score:
+                lowest_total_score = current_total_score
+                best_country_category_pairs = list(
+                    zip(all_country_names, category_permutation)
+                )
+
+    # Step 8: Prepare the output
+    formatted_results = []
+    for country_name, category_backend_name in best_country_category_pairs:
+        formatted_results.append(
+            {
+                "country": country_name,
+                "category_backend": category_backend_name,
+                "category_frontend": category_name_to_frontend_label[
+                    category_backend_name
+                ],
+                "rank": rank_lookup[country_name][category_backend_name],
+            }
+        )
+
+    # Step 9: Return a nicely structured result
+    return {
+        "total_score": lowest_total_score,
+        "pairs": sorted(formatted_results, key=lambda x: x["rank"]),
+    }

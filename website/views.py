@@ -3,7 +3,7 @@ from flask_login import current_user
 from datetime import datetime
 import time
 from .models import User, dailyScores, dailyChallenges
-from .data import getCountries, generateGameCategories, getCountryData
+from .data import getCountries, generateGameCategories, getCountryData, optimalSolution
 from . import db
 
 views = Blueprint("views", __name__)
@@ -127,5 +127,14 @@ def leaderboard():
             "score_per_game": user_score_per_game
             }
         all_user_score_summaries.append(user_score_summary)
-        
-    return render_template("leaderboard.html", all_daily_score_summaries=all_daily_score_summaries, all_user_score_summaries=all_user_score_summaries)
+
+    # show the user the optimal solution for today's challenge
+    existing_daily_challenge = dailyChallenges.query.filter_by(date=today).first()
+    existing_user_attempt = dailyScores.query.filter_by(date=today, user_id=current_user.id).first()
+    if existing_daily_challenge and existing_user_attempt:
+        all_game_data_for_front_end = existing_daily_challenge.all_game_data_for_front_end
+        optimal_solution = optimalSolution(all_game_data_for_front_end)
+    else:
+        optimal_solution = None
+
+    return render_template("leaderboard.html", all_daily_score_summaries=all_daily_score_summaries, all_user_score_summaries=all_user_score_summaries, optimal_solution=optimal_solution)
