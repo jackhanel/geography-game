@@ -134,8 +134,10 @@ def leaderboard():
         user_id = current_user.id
     else:
         user_id is None
+    print(f'user id: {user_id}')
     existing_user_attempt = dailyScores.query.filter_by(date=today, user_id=user_id).first()
     if existing_daily_challenge and existing_user_attempt:
+        print('both are working')
         all_game_data_for_front_end = existing_daily_challenge.all_game_data_for_front_end
         optimal_solution = optimalSolution(all_game_data_for_front_end)
     else:
