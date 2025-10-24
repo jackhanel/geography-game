@@ -14,6 +14,9 @@ def lifeExpectancy():
 
         most_recent_data = {}
         for row in reader:
+            if not row["Code"] or row["Code"] == "OWID_WRL":
+                continue
+            
             country = row["Entity"]
             year = row["Year"]
             data = row["Period life expectancy at birth"]
@@ -33,7 +36,6 @@ def lifeExpectancy():
 
 def population():
     url = "https://ourworldindata.org/grapher/population.csv"
-    # url = "https://ourworldindata.org/grapher/population-with-un-projections?country=USA~IND~CHN~IDN~PAK~VAT~NIU~TKL~FLK~MSR~SHN~SPM~TUV~BLM~WLF~NRU~COK~AIA~PLW~MAF~BES~SMR~GIB~MHL~MCO~VGB~LIE~SXM~MNP~TCA~KNA~ASM~FRO~GRL~GGY~BMU~DMA~CYM~AND~IMN~VIR~ATG~VCT~JEY~TON~ABW~FSM~GRD~SYC~KIR~GUM~LCA~CUW~WSM~STP~PYF~BRB~NCL~GUF~MYT~VUT~MTQ~GLP~ISL~BHS~BLZ~BRN~CPV~MDV~MLT~ESH~SUR~MNE~LUX~MAC~BTN~SLB~GUY~COM~REU~FJI~DJI~SWZ~MUS~CYP~EST~TLS~TTO~BHR~OWID_KOS~MKD~GNQ~LVA~SVN~GNB~LSO~BWA~GAB~GMB~ALB~JAM~LTU~ARM~NAM~QAT~MDA~BIH~PRI~URY~MNG~ERI~GEO~HRV~PAN~KWT~MRT~OMN~CRI~CAF~NZL~IRL~PSE~LBR~SVK~NOR~FIN~LBN~SGP~DNK~COG~SLV~SRB~BGR~NIC~PRY~KGZ~LBY~TKM~HKG~LAO~SLE~CHE~BLR~AUT~ISR~TGO~HUN~GRC~AZE~PNG~TJK~PRT~SWE~ARE~HND~CZE~CUB~DOM~JOR~SSD~HTI~BEL~TUN~BOL~BDI~RWA~BEN~GIN~ZWE~KHM~ECU~SEN~NLD~GTM~SOM~ROU~TCD~CHL~KAZ~ZMB~MWI~LKA~BFA~TWN~SYR~MLI~NER~PRK~AUS~VEN~CMR~NPL~CIV~MDG~SAU~MOZ~GHA~PER~MYS~UZB~AGO~MAR~UKR~POL~CAN~YEM~AFG~IRQ~ARG~DZA~ESP~UGA~SDN~KOR~COL~MMR~KEN~ITA~ZAF~FRA~TZA~GBR~THA~DEU~TUR~IRN~VNM~COD~EGY~PHL~JPN~ETH~MEX~RUS~BGD~BRA~NGA"
     response = requests.get(url)
     if response.status_code == 200:
         csv_file = io.StringIO(response.text)
@@ -41,6 +43,9 @@ def population():
 
         most_recent_data = {}
         for row in reader:
+            if not row["Code"] or row["Code"] == "OWID_WRL":
+                continue
+            
             country = row["Entity"]
             year = row["Year"]
             data = row["Population (historical)"]
@@ -57,8 +62,8 @@ def population():
         return most_recent_data
 
 
-def co2EmissionsPerCapita():
-    url = "https://ourworldindata.org/grapher/co-emissions-per-capita.csv"
+def co2Emissions():
+    url = "https://ourworldindata.org/grapher/annual-co2-emissions-per-country.csv"
     response = requests.get(url)
     response.encoding = "utf-8"     
     if response.status_code == 200:
@@ -67,10 +72,43 @@ def co2EmissionsPerCapita():
 
         most_recent_data = {}
         for row in reader:
-
+            if not row["Code"] or row["Code"] == "OWID_WRL":
+                continue
+            
             country = row["Entity"]
             year = row["Year"]
-            data = row["Annual CO₂ emissions (per capita)"]
+            data = row["Annual CO₂ emissions"]
+            if (
+                country not in most_recent_data
+                or year > most_recent_data[country]["year"]
+            ):
+                most_recent_data[country] = {
+                    "country": country,
+                    "code": row["Code"],
+                    "year": year,
+                    "data": data,
+                }
+        most_recent_data = list(most_recent_data.values())
+        if most_recent_data is None:
+            print(f'most recent data is "None" for {url}')
+        return most_recent_data
+
+def oilProduction():
+    url = "https://ourworldindata.org/grapher/oil-production-by-country.csv"
+    response = requests.get(url)
+    response.encoding = "utf-8"     
+    if response.status_code == 200:
+        csv_file = io.StringIO(response.text)
+        reader = csv.DictReader(csv_file)
+
+        most_recent_data = {}
+        for row in reader:
+            if not row["Code"] or row["Code"] == "OWID_WRL":
+                continue
+            
+            country = row["Entity"]
+            year = row["Year"]
+            data = row["Oil production (TWh)"]
             if (
                 country not in most_recent_data
                 or year > most_recent_data[country]["year"]
@@ -87,6 +125,37 @@ def co2EmissionsPerCapita():
         return most_recent_data
 
 
+def wildfireBurnArea():
+    url = "https://ourworldindata.org/grapher/annual-area-burnt-by-wildfires.csv"
+    response = requests.get(url)
+    response.encoding = "utf-8"     
+    if response.status_code == 200:
+        csv_file = io.StringIO(response.text)
+        reader = csv.DictReader(csv_file)
+
+        most_recent_data = {}
+        for row in reader:
+            if not row["Code"] or row["Code"] == "OWID_WRL":
+                continue
+            
+            country = row["Entity"]
+            year = row["Year"]
+            data = row["Annual area burnt by wildfires"]
+            if (
+                country not in most_recent_data
+                or year > most_recent_data[country]["year"]
+            ):
+                most_recent_data[country] = {
+                    "country": country,
+                    "code": row["Code"],
+                    "year": year,
+                    "data": data,
+                }
+        most_recent_data = list(most_recent_data.values())
+        if most_recent_data is None:
+            print(f'most recent data is "None" for {url}')
+        return most_recent_data
+
 def energyUsePerCapita():
     url = "https://ourworldindata.org/grapher/per-capita-energy-use.csv"
     response = requests.get(url)
@@ -95,7 +164,9 @@ def energyUsePerCapita():
         reader = csv.DictReader(csv_file)
 
         most_recent_data = {}
-        for row in reader:
+        for row in reader:            
+            if not row["Code"] or row["Code"] == "OWID_WRL":
+                continue
             
             country = row["Entity"]
             year = row["Year"]
@@ -124,7 +195,9 @@ def calorieSupplyPerCapita():
         reader = csv.DictReader(csv_file)
 
         most_recent_data = {}
-        for row in reader:
+        for row in reader:            
+            if not row["Code"] or row["Code"] == "OWID_WRL":
+                continue
             
             country = row["Entity"]
             year = row["Year"]
@@ -154,6 +227,9 @@ def humanDevelopmentIndex():
 
         most_recent_data = {}
         for row in reader:
+            if not row["Code"] or row["Code"] == "OWID_WRL":
+                continue
+            
             country = row["Entity"]
             year = row["Year"]
             data = row["Human Development Index"]
@@ -181,7 +257,9 @@ def literacyRate():
         reader = csv.DictReader(csv_file)
 
         most_recent_data = {}
-        for row in reader:
+        for row in reader:            
+            if not row["Code"] or row["Code"] == "OWID_WRL":
+                continue
             
             country = row["Entity"]
             year = row["Year"]
@@ -210,7 +288,9 @@ def shareOfIndividualsUsingTheInternet():
         reader = csv.DictReader(csv_file)
 
         most_recent_data = {}
-        for row in reader:
+        for row in reader:            
+            if not row["Code"] or row["Code"] == "OWID_WRL":
+                continue
             
             country = row["Entity"]
             year = row["Year"]
@@ -239,7 +319,9 @@ def yearlyNumberOfObjectsLaunchedIntoOuterSpace():
         reader = csv.DictReader(csv_file)
 
         most_recent_data = {}
-        for row in reader:
+        for row in reader:            
+            if not row["Code"] or row["Code"] == "OWID_WRL":
+                continue
             
             country = row["Entity"]
             year = row["Year"]
@@ -268,7 +350,9 @@ def militarySpendingAsAGShareOfGDP():
         reader = csv.DictReader(csv_file)
 
         most_recent_data = {}
-        for row in reader:
+        for row in reader:            
+            if not row["Code"] or row["Code"] == "OWID_WRL":
+                continue
             
             country = row["Entity"]
             year = row["Year"]
@@ -297,7 +381,9 @@ def homicideRate():
         reader = csv.DictReader(csv_file)
 
         most_recent_data = {}
-        for row in reader:
+        for row in reader:            
+            if not row["Code"] or row["Code"] == "OWID_WRL":
+                continue
             
             country = row["Entity"]
             year = row["Year"]
@@ -327,7 +413,9 @@ def shareOfGDPFromTourism():
 
         most_recent_data = {}
         for row in reader:
-
+            if not row["Code"] or row["Code"] == "OWID_WRL":
+                continue
+            
             country = row["Entity"]
             year = row["Year"]
             data = row["GDP from tourism as a share of total GDP"]
@@ -356,7 +444,9 @@ def GDPPerCapita():
 
         most_recent_data = {}
         for row in reader:
-
+            if not row["Code"] or row["Code"] == "OWID_WRL":
+                continue
+            
             country = row["Entity"]
             year = row["Year"]
             data = row["GDP per capita, PPP (constant 2021 international $)"]
@@ -393,6 +483,9 @@ def uniqueSpecies():
             reader = csv.DictReader(csv_file)
 
             for row in reader:
+                if not row["Code"] or row["Code"] == "OWID_WRL":
+                    continue
+                
                 country = row["Entity"]
                 year = row["Year"]
                 # column name changes with category
@@ -436,7 +529,9 @@ def shareOfLandCoveredByLakesAndRivers():
         reader = csv.DictReader(csv_file)
 
         most_recent_data = {}
-        for row in reader:
+        for row in reader:            
+            if not row["Code"] or row["Code"] == "OWID_WRL":
+                continue
             
             country = row["Entity"]
             year = row["Year"]
@@ -481,7 +576,9 @@ def rankCountries(most_recent_data):
 data_options = [
     {"backend_name": "life_expectancy_data", "front_end_name": "👨‍🦳🧑‍🦳 Life Expectancy"},
     {"backend_name": "population_data", "front_end_name": "👨‍👩‍👧‍👦 Population"},
-    {"backend_name": "co2_emissions_per_capita_data", "front_end_name": "🏭 CO2 Emissions (per capita)"},
+    {"backend_name": "co2_emissions_data", "front_end_name": "🏭 CO2 Emissions"},
+    {"backend_name": "oil_production_data", "front_end_name": "🛢️ Oil Production"},
+    {"backend_name": "wildfire_burn_area_data", "front_end_name": "🔥 Wildfires"},
     {"backend_name": "energy_use_per_capita_data", "front_end_name": "🔋 Energy Use (per capita)"},
     {"backend_name": "calorie_supply_per_capita_data", "front_end_name": "🍔 Calorie Supply (per capita)"},
     {"backend_name": "human_development_index_data", "front_end_name": "🏙️ HDI"},
@@ -515,55 +612,45 @@ def getCountryData(game_category_backend_names):
     for game_category_backend_name in game_category_backend_names:
         if game_category_backend_name == "life_expectancy_data":
             most_recent_data = lifeExpectancy()
-            most_recent_data_ranked = rankCountries(most_recent_data)
         elif game_category_backend_name == "population_data":
             most_recent_data = population()
-            most_recent_data_ranked = rankCountries(most_recent_data)
-        elif game_category_backend_name == "co2_emissions_per_capita_data":
-            most_recent_data = co2EmissionsPerCapita()
-            most_recent_data_ranked = rankCountries(most_recent_data)
+        elif game_category_backend_name == "co2_emissions_data":
+            most_recent_data = co2Emissions()
+        elif game_category_backend_name == "oil_production_data":
+            most_recent_data = oilProduction()
+        elif game_category_backend_name == "wildfire_burn_area_data":
+            most_recent_data = wildfireBurnArea()
         elif game_category_backend_name == "energy_use_per_capita_data":
             most_recent_data = energyUsePerCapita()
-            most_recent_data_ranked = rankCountries(most_recent_data)
         elif game_category_backend_name == "calorie_supply_per_capita_data":
             most_recent_data = calorieSupplyPerCapita()
-            most_recent_data_ranked = rankCountries(most_recent_data)
         elif game_category_backend_name == "human_development_index_data":
             most_recent_data = humanDevelopmentIndex()
-            most_recent_data_ranked = rankCountries(most_recent_data)
         elif game_category_backend_name == "literacy_rate_data":
             most_recent_data = literacyRate()
-            most_recent_data_ranked = rankCountries(most_recent_data)
         elif game_category_backend_name == "share_of_individuals_using_the_internet_data":
             most_recent_data = shareOfIndividualsUsingTheInternet()
-            most_recent_data_ranked = rankCountries(most_recent_data)
         elif game_category_backend_name == "yearly_number_of_objects_launched_into_outer_space_data":
             most_recent_data = yearlyNumberOfObjectsLaunchedIntoOuterSpace()
-            most_recent_data_ranked = rankCountries(most_recent_data)
         elif game_category_backend_name == "military_spending_as_a_share_of_gdp_data":
             most_recent_data = militarySpendingAsAGShareOfGDP()
-            most_recent_data_ranked = rankCountries(most_recent_data)
         elif game_category_backend_name == "homicide_rate_data":
             most_recent_data = homicideRate()
-            most_recent_data_ranked = rankCountries(most_recent_data)
         elif game_category_backend_name == "share_of_gdp_from_tourism_data":
             most_recent_data = shareOfGDPFromTourism()
-            most_recent_data_ranked = rankCountries(most_recent_data)
         elif game_category_backend_name == "gdp_per_capita_data":
             most_recent_data = GDPPerCapita()
-            most_recent_data_ranked = rankCountries(most_recent_data)
         elif game_category_backend_name == "unique_species_data":
             most_recent_data = uniqueSpecies()
-            most_recent_data_ranked = rankCountries(most_recent_data)
         elif game_category_backend_name == "share_of_land_covered_by_lakes_and_rivers_data":
             most_recent_data = shareOfLandCoveredByLakesAndRivers()
-            most_recent_data_ranked = rankCountries(most_recent_data)
-        
+        most_recent_data_ranked = rankCountries(most_recent_data)
+
         # map the backend name to the front end name from our data_options list
         for data_option in data_options:
             if data_option["backend_name"] == game_category_backend_name:
                 game_category_front_end_name = data_option["front_end_name"]
-        
+
         dictionary = {"game_category_backend_name": game_category_backend_name, "game_category_front_end_name": game_category_front_end_name, "country_ranks": most_recent_data_ranked}
         all_game_data.append(dictionary)
     return all_game_data
