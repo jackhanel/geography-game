@@ -613,7 +613,6 @@ countries = [
     {"country_name": "Kazakhstan", "flag": "🇰🇿"},
     {"country_name": "Kenya", "flag": "🇰🇪"},
     {"country_name": "Kyrgyzstan", "flag": "🇰🇬"},
-    {"country_name": "Madagascar", "flag": "🇲🇬"},
     {"country_name": "Malaysia", "flag": "🇲🇾"},
     {"country_name": "Mexico", "flag": "🇲🇽"},
     {"country_name": "Montenegro", "flag": "🇲🇪"},
