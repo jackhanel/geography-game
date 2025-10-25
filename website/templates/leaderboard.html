@@ -167,8 +167,9 @@
                 <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
                     <div class="flex items-center gap-3">
                         <h2 class="text-lg font-semibold">Optimal Solution for {{ today }}</h2>
-                        <span
-                            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">
+                        <span class="inline-block px-2 py-1 text-xs font-medium
+                                 bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200
+                                 rounded-lg sm:rounded-full sm:whitespace-nowrap">
                             Lowest possible score
                         </span>
                     </div>
@@ -200,17 +201,14 @@
                                         <span>{{ pair.country }}</span>
                                     </span>
                                 </td>
-                                <td class="px-4 py-3">
-                                    <span title="{{ pair.category_frontend }}" class="inline-flex items-center gap-1 px-2 py-1
+                                <td class="px-6 py-3 align-top">
+                                    <span title="{{ pair.category_frontend }}" class="inline-block px-2 py-1
                                            bg-slate-100 text-slate-700 ring-1 ring-slate-200
-                                           text-sm leading-5
-                                           rounded-xl md:rounded-full
-                                           max-w-[10rem] md:max-w-none
-                                           whitespace-nowrap overflow-hidden text-ellipsis md:whitespace-normal md:overflow-visible md:text-clip">
+                                           text-sm leading-5 rounded-lg
+                                           whitespace-normal break-words">
                                         {{ pair.category_frontend }}
                                     </span>
                                 </td>
-
                                 <td class="px-6 py-3 text-right">
                                     <span
                                         class="font-semibold tabular-nums text-slate-600">
