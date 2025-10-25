@@ -164,23 +164,38 @@
             <!-- Optimal Solution (shown if user has attempted today) -->
             {% if optimal_solution %}
             <div class="bg-white rounded-2xl shadow-sm ring-1 ring-slate-200 overflow-hidden mb-10">
-                <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
-                    <div class="flex items-center gap-3">
-                        <h2 class="text-lg font-semibold">Optimal Solution for {{ today }}</h2>
-                        <span class="inline-block px-2 py-1 text-xs font-medium
-                                 bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200
-                                 rounded-lg sm:rounded-full sm:whitespace-nowrap">
-                            Lowest possible score
-                        </span>
-                    </div>
-                    <div class="text-sm text-slate-600">
-                        Total score:
-                        <span class="font-semibold text-slate-900 tabular-nums">{{ optimal_solution.total_score }}</span>
+                <div class="px-6 py-4 border-b border-slate-200">
+                    <div class="flex items-center justify-between gap-3">
+                        <!-- Left: title + green pill (no wrap) -->
+                        <div class="min-w-0 flex items-center gap-2">
+                            <h2 class="truncate text-base sm:text-lg md:text-xl font-semibold">
+                                Optimal Solution for {{ today }}
+                            </h2>
+                            <span class="shrink-0 inline-block px-2 py-1 text-[10px] sm:text-xs font-medium
+                                   bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200
+                                   rounded-full">
+                                Lowest possible score
+                            </span>
+                        </div>
+                
+                        <!-- Right: total score -->
+                        <div class="shrink-0 text-sm text-slate-600">
+                            Total score: <span class="font-semibold text-slate-900 tabular-nums">
+                                {{ optimal_solution.total_score }}
+                            </span>
+                        </div>
                     </div>
                 </div>
             
                 <div class="overflow-x-auto">
-                    <table class="min-w-full text-sm">
+                    <table class="table-auto text-sm min-w-[760px]"> <!-- wider than viewport on mobile -->
+                        <colgroup>
+                            <col class="w-10" /> <!-- # -->
+                            <col class="w-[160px]" /> <!-- Country -->
+                            <col class="w-[420px]" /> <!-- Optimal Category (wide) -->
+                            <col class="w-14" /> <!-- Rank -->
+                        </colgroup>
+                
                         <thead class="bg-slate-50 text-slate-700">
                             <tr>
                                 <th class="text-left px-6 py-3 font-semibold">#</th>
@@ -189,31 +204,30 @@
                                 <th class="text-right px-6 py-3 font-semibold">Rank</th>
                             </tr>
                         </thead>
+                
                         <tbody class="divide-y divide-slate-100">
                             {% for pair in optimal_solution.pairs %}
                             <tr>
                                 <td class="px-6 py-3 text-slate-500">{{ loop.index }}</td>
+                
                                 <td class="px-6 py-3 font-medium">
                                     <span class="inline-flex items-center gap-2">
-                                        {% if pair.flag %}
-                                        <span class="text-lg" aria-hidden="true">{{ pair.flag }}</span>
-                                        {% endif %}
+                                        {% if pair.flag %}<span class="text-lg" aria-hidden="true">{{ pair.flag }}</span>{% endif %}
                                         <span>{{ pair.country }}</span>
                                     </span>
                                 </td>
-                                <td class="px-6 py-3 align-top">
-                                    <span title="{{ pair.category_frontend }}" class="inline-block px-2 py-1
-                                           bg-slate-100 text-slate-700 ring-1 ring-slate-200
-                                           text-sm leading-5 rounded-lg
-                                           whitespace-normal break-words">
+                
+                                <!-- one-line chip; never wraps -->
+                                <td class="px-6 py-3">
+                                    <span title="{{ pair.category_frontend }}" class="inline-flex items-center px-2.5 py-1 rounded-xl
+                                   bg-slate-100 text-slate-700 ring-1 ring-slate-200
+                                   whitespace-nowrap">
                                         {{ pair.category_frontend }}
                                     </span>
                                 </td>
+                
                                 <td class="px-6 py-3 text-right">
-                                    <span
-                                        class="font-semibold tabular-nums text-slate-600">
-                                        {{ pair.rank }}
-                                    </span>
+                                    <span class="font-semibold tabular-nums text-slate-600">{{ pair.rank }}</span>
                                 </td>
                             </tr>
                             {% endfor %}
