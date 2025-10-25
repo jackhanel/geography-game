@@ -31,6 +31,7 @@ def lifeExpectancy():
         most_recent_data = list(most_recent_data.values())
         if most_recent_data is None:
             print(f'most recent data is "None" for {url}')
+        print(f'life expectancy most recent data: {most_recent_data}')
         return most_recent_data
 
 
