@@ -200,15 +200,20 @@
                                         <span>{{ pair.country }}</span>
                                     </span>
                                 </td>
-                                <td class="px-6 py-3">
-                                    <span
-                                        class="inline-flex items-center px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 ring-1 ring-slate-200">
+                                <td class="px-4 py-3">
+                                    <span title="{{ pair.category_frontend }}" class="inline-flex items-center gap-1 px-2 py-1
+                                           bg-slate-100 text-slate-700 ring-1 ring-slate-200
+                                           text-sm leading-5
+                                           rounded-xl md:rounded-full
+                                           max-w-[10rem] md:max-w-none
+                                           whitespace-nowrap overflow-hidden text-ellipsis md:whitespace-normal md:overflow-visible md:text-clip">
                                         {{ pair.category_frontend }}
                                     </span>
                                 </td>
+
                                 <td class="px-6 py-3 text-right">
                                     <span
-                                        class="font-semibold tabular-nums {% if pair.rank <= 10 %}text-emerald-700{% elif pair.rank <= 50 %}text-slate-900{% else %}text-slate-600{% endif %}">
+                                        class="font-semibold tabular-nums text-slate-600">
                                         {{ pair.rank }}
                                     </span>
                                 </td>

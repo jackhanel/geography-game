@@ -93,21 +93,25 @@
                             (used_categories|length if used_categories else 0) }}</span></p>
                 </div>
 
-                <!-- Current country -->
-                <div class="text-center mb-8">
-                    <!-- Score indicator -->
-                    <div id="score-indicator" class="mx-auto mb-3 w-fit rounded-2xl px-4 py-2 text-sm font-semibold ring-1 shadow-sm
-                              bg-green-100 text-green-800 ring-green-400">
-                        Total Score: 0
-                    </div>
+                <!-- Sticky: country/flag/score -->
+                <div class="sticky top-0 z-20 -mx-6 md:-mx-8 px-6 md:px-8 py-3
+                            bg-white/90 supports-[backdrop-filter]:bg-white/70 backdrop-blur
+                            border-b border-slate-200">
+                    <div class="text-center">
+                        <div id="score-indicator" class="mx-auto mb-2 w-fit rounded-xl px-3 py-1.5 text-xs font-semibold ring-1 shadow-sm
+                                bg-green-100 text-green-800 ring-green-400">
+                            Total Score: 0
+                        </div>
                 
-                    <h1 id="flag-display" class="mt-3 text-5xl md:text-6xl font-bold tracking-tight"></h1>
-                    <h1 id="country-display" class="text-3xl md:text-4xl font-bold tracking-tight"></h1>
+                        <div class="flex items-center justify-center gap-2">
+                            <h1 id="flag-display" class="text-4xl md:text-6xl font-bold tracking-tight"></h1>
+                            <h1 id="country-display" class="text-2xl md:text-4xl font-bold tracking-tight"></h1>
+                        </div>
+                    </div>
                 </div>
 
-
                 <!-- Categories grid -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mt-4">
                     {% for game_data in all_game_data_for_front_end %}
                     <button name="pick_category" value="{{ game_data['game_category_front_end_name'] }}"
                         data-backend="{{ game_data['game_category_backend_name'] }}" type="button" class="group w-full h-16 rounded-xl border text-sm font-semibold transition shadow-sm flex items-center justify-center text-center px-3
