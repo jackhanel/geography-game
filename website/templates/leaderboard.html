@@ -165,20 +165,21 @@
             {% if optimal_solution %}
             <div class="bg-white rounded-2xl shadow-sm ring-1 ring-slate-200 overflow-hidden mb-10">
                 <div class="px-6 py-4 border-b border-slate-200">
-                    <div class="flex items-center justify-between gap-3">
-                        <!-- Left: title + green pill (no wrap) -->
-                        <div class="min-w-0 flex items-center gap-2">
-                            <h2 class="truncate text-base sm:text-lg md:text-xl font-semibold">
-                                Optimal Solution for {{ today }}
-                            </h2>
-                        </div>
+                    <!-- allow wrapping on mobile -->
+                    <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                        <!-- title: full width on mobile, inline on sm+ -->
+                        <h2 class="w-full sm:w-auto text-base sm:text-lg md:text-xl font-semibold leading-tight">
+                            Optimal Solution for {{ today }}
+                        </h2>
                 
-                        <!-- Right: total score -->
-                        <div class="shrink-0 text-sm bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200 rounded-full p-1">
-                            Lowest possible score: <span class="font-semibold text-slate-900 tabular-nums">
+                        <!-- green pill: sits to the right on sm+, drops below on mobile -->
+                        <span class="shrink-0 inline-block px-2 py-1 text-[11px] sm:text-xs font-medium
+                                 bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200 rounded-full">
+                            Lowest possible score:
+                            <span class="font-semibold tabular-nums text-emerald-900">
                                 {{ optimal_solution.total_score }}
                             </span>
-                        </div>
+                        </span>
                     </div>
                 </div>
             
