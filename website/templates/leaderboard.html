@@ -113,13 +113,15 @@
                     <span class="text-xs text-slate-500">Total points across all games</span>
                 </div>
 
-                {# --- ALL-TIME: lowest first; zeros at bottom --- #}
-                {% set alltime_nonzero = all_user_score_summaries
-                | rejectattr('total_game_score', 'equalto', 0)
-                | sort(attribute='total_game_score') | list %}
-                {% set alltime_zero = all_user_score_summaries
-                | selectattr('total_game_score', 'equalto', 0) | list %}
-                {% set alltime_sorted = alltime_nonzero + alltime_zero %}
+                {# --- ALL-TIME: lowest score_per_game first; no-game users at bottom --- #}
+                {% set alltime_ranked = all_user_score_summaries
+                | selectattr('score_per_game', 'gt', 0)
+                | sort(attribute='score_per_game') | list %}
+                
+                {% set alltime_unranked = all_user_score_summaries
+                | rejectattr('score_per_game', 'gt', 0) | list %}
+                
+                {% set alltime_sorted = alltime_ranked + alltime_unranked %}
 
                 {% if alltime_sorted|length > 0 %}
                 <div class="overflow-x-auto">
