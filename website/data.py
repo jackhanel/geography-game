@@ -45,7 +45,7 @@ def population():
         for row in reader:
             if not row["Code"] or row["Code"] == "OWID_WRL":
                 continue
-            
+
             country = row["Entity"]
             year = row["Year"]
             data = row["Population (historical)"]
@@ -59,6 +59,7 @@ def population():
         most_recent_data = list(most_recent_data.values())
         if most_recent_data is None:
             print(f'most recent data is "None" for {url}')
+        print(f'population data: {most_recent_data}')
         return most_recent_data
 
 
@@ -92,6 +93,7 @@ def co2Emissions():
         if most_recent_data is None:
             print(f'most recent data is "None" for {url}')
         return most_recent_data
+
 
 def oilProduction():
     url = "https://ourworldindata.org/grapher/oil-production-by-country.csv"
@@ -155,6 +157,7 @@ def wildfireBurnArea():
         if most_recent_data is None:
             print(f'most recent data is "None" for {url}')
         return most_recent_data
+
 
 def energyUsePerCapita():
     url = "https://ourworldindata.org/grapher/per-capita-energy-use.csv"
@@ -277,6 +280,7 @@ def literacyRate():
         most_recent_data = list(most_recent_data.values())
         if most_recent_data is None:
             print(f'most recent data is "None" for {url}')
+        print(f'literacy rate data: {most_recent_data}')
         return most_recent_data
 
 
