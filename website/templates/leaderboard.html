@@ -145,10 +145,10 @@
                                     </span>
                                 </td>
                                 <td class="px-6 py-3 font-medium">{{ row.username }}</td>
-                                <td class="px-6 py-3 text-right tabular-nums font-semibold">{{ row.total_game_score }}
+                                <td class="px-6 py-3 text-right tabular-nums">{{ row.total_game_score }}
                                 </td>
                                 <td class="px-6 py-3 text-right tabular-nums">{{ row.total_game_count }}</td>
-                                <td class="px-6 py-3 text-right tabular-nums">
+                                <td class="px-6 py-3 text-right tabular-nums font-semibold">
                                     {{ "%.2f"|format(row.score_per_game or 0) }}
                                 </td>
                             </tr>
