@@ -419,10 +419,10 @@ def shareOfGDPFromTourism():
         for row in reader:
             if not row["Code"] or row["Code"] == "OWID_WRL":
                 continue
-            
+
             country = row["Entity"]
             year = row["Year"]
-            data = row["GDP from tourism as a share of total GDP"]
+            data = row["Tourism contribution to GDP"]
             if (
                 country not in most_recent_data
                 or year > most_recent_data[country]["year"]
