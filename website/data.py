@@ -173,7 +173,7 @@ def energyUsePerCapita():
             
             country = row["Entity"]
             year = row["Year"]
-            data = row["Primary energy consumption per capita (kWh/person)"]
+            data = row["Per capita energy consumption"]
             if (
                 country not in most_recent_data
                 or year > most_recent_data[country]["year"]
