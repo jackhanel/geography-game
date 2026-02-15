@@ -16,10 +16,10 @@ def lifeExpectancy():
         for row in reader:
             if not row["Code"] or row["Code"] == "OWID_WRL":
                 continue
-            
+
             country = row["Entity"]
             year = row["Year"]
-            data = row["Period life expectancy at birth"]
+            data = row["Life expectancy"]
             if country not in most_recent_data or year > most_recent_data[country]["year"]:
                 most_recent_data[country] = {
                     "country": country,
@@ -48,7 +48,7 @@ def population():
 
             country = row["Entity"]
             year = row["Year"]
-            data = row["Population (historical)"]
+            data = row["Population"]
             if country not in most_recent_data or year > most_recent_data[country]["year"]:
                 most_recent_data[country] = {
                     "country": country,
@@ -110,7 +110,7 @@ def oilProduction():
             
             country = row["Entity"]
             year = row["Year"]
-            data = row["Oil production (TWh)"]
+            data = row["Oil"]
             if (
                 country not in most_recent_data
                 or year > most_recent_data[country]["year"]
@@ -139,7 +139,7 @@ def wildfireBurnArea():
         for row in reader:
             if not row["Code"] or row["Code"] == "OWID_WRL":
                 continue
-            
+
             country = row["Entity"]
             year = row["Year"]
             data = row["Annual area burnt by wildfires"]
@@ -170,7 +170,7 @@ def energyUsePerCapita():
         for row in reader:            
             if not row["Code"] or row["Code"] == "OWID_WRL":
                 continue
-            
+
             country = row["Entity"]
             year = row["Year"]
             data = row["Per capita energy consumption"]
@@ -295,10 +295,10 @@ def shareOfIndividualsUsingTheInternet():
         for row in reader:            
             if not row["Code"] or row["Code"] == "OWID_WRL":
                 continue
-            
+
             country = row["Entity"]
             year = row["Year"]
-            data = row["Individuals using the Internet (% of population)"]
+            data = row["Share of the population using the Internet"]
             if (
                 country not in most_recent_data
                 or year > most_recent_data[country]["year"]
@@ -326,7 +326,7 @@ def yearlyNumberOfObjectsLaunchedIntoOuterSpace():
         for row in reader:            
             if not row["Code"] or row["Code"] == "OWID_WRL":
                 continue
-            
+
             country = row["Entity"]
             year = row["Year"]
             data = row["Annual number of objects launched into outer space"]
@@ -391,7 +391,7 @@ def homicideRate():
             
             country = row["Entity"]
             year = row["Year"]
-            data = row["Homicide rate per 100,000 population - sex: Total - age: Total"]
+            data = row['"Homicide rate per 100,000 population"']
             if (
                 country not in most_recent_data
                 or year > most_recent_data[country]["year"]
@@ -453,7 +453,7 @@ def GDPPerCapita():
             
             country = row["Entity"]
             year = row["Year"]
-            data = row["GDP per capita, PPP (constant 2021 international $)"]
+            data = row["GDP per capita"]
             if (
                 country not in most_recent_data
                 or year > most_recent_data[country]["year"]
@@ -536,10 +536,10 @@ def shareOfLandCoveredByLakesAndRivers():
         for row in reader:            
             if not row["Code"] or row["Code"] == "OWID_WRL":
                 continue
-            
+
             country = row["Entity"]
             year = row["Year"]
-            data = row["6.6.1 - Lakes and rivers permanent water area (% of total land area) - EN_LKRV_PWAP"]
+            data = row["Lakes and rivers permanent water area (% of total land area)"]
             if (
                 country not in most_recent_data
                 or year > most_recent_data[country]["year"]
