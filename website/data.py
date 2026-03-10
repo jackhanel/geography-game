@@ -392,7 +392,6 @@ def homicideRate():
             country = row["Entity"]
             year = row["Year"]
             data = row['"Homicide rate per 100,000 population"']
-            print(f'data error? {row[4]}')
             if (
                 country not in most_recent_data
                 or year > most_recent_data[country]["year"]
